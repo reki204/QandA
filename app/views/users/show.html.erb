@@ -1,0 +1,66 @@
+<div class="text-center mt-3">
+  <% if @user.id == current_user.id %>
+    <h1>マイページ</h1>
+  <% else %>
+    <h1>ユーザーページ</h1>
+  <% end %>
+</div>
+<div class="d-flex justify-content-around">
+  <div>
+    <% if @user.image? %>
+      <%= image_tag @user.image_url, size: "300x300", class: "userpage_class rounded-circle"%>
+    <% else %>
+      <%= image_tag 'no-image.png' %>
+    <% end %>
+  </div>
+  <div class="d-flex flex-column">
+    <span class="px-2">ユーザーネーム</span><%= @user.username %>
+    <span class="px-2">メッセージ</span><%= @user.profile %>
+    <span class="px-2">質問数</span><%= @user.questions.count %>
+    <span class="px-2">アドバイス数</span><%= @user.answers.count %>
+    <% if @user.id == current_user.id %>
+      <%= link_to "編集", edit_user_path(@user), class: 'btn' %>
+    <% end %>
+  </div>
+</div>
+<br>
+
+<div class="row">
+  <h3 class="text-center">質問一覧</h3>
+  <% @questions.each do |question|%>
+    <div class="col-md-4">
+      <div class="card login">
+        <div class="card-body">
+          <%= link_to question_path(question) do %>
+            <%= image_tag question.image_url, size: "200x200" if question.image? %>
+            <%= question.title %>
+            <br>
+          <% end %>
+          <%= question.updated_at.strftime("%Y-%m-%d %H:%M") %>更新
+          <div class="p-2 d-inline-flex flex-row ">
+            <%= link_to  question_path(question) do %>
+              <div class="d-flex px-3">
+                <i class="fas fa-sticky-note pt-1"></i><p>詳細</p>
+              </div>
+            <% end %>
+            <% if @user.id == current_user.id %>
+              <%= link_to edit_question_path(question) do %>
+                <div class="d-flex">
+                  <i class="fas fa-edit pt-1"></i><p>編集</p>
+                </div>
+              <% end %>
+              <%= link_to question_path(question), method: :delete, data: {confirm: "削除しますか？"} do %>
+                <div class="d-flex px-3">
+                  <i class="fas fa-trash-alt pt-1"></i><p>削除</p>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div class="my-3">
+  <%= paginate @questions %>
+</div>

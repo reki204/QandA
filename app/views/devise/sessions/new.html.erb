@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <div class="card login">
+      <div class="card-body">
+        <h2 class="text-center">ログイン</h2>
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <div class="field">
+            <div class="form-group">
+              <label for="validationServer01" class="form-label">メールアドレス</label><br />
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="form-group">
+              <label for="validationServer01" class="form-label">パスワード</label><br />
+              <%= f.password_field :password, autocomplete: "current-password", class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="login_remember">
+            <% if devise_mapping.rememberable? %>
+              <div class="field">
+                <%= f.check_box :remember_me %>
+                <%= f.label :remember_me %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="actions">
+            <%= f.submit "Log in", class: 'btn' %>
+          </div>
+        <% end %>
+
+        <div class="login_remember">
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
