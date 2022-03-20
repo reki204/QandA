@@ -7,6 +7,5 @@ class Question < ApplicationRecord
   with_options presence: true do
     validates :title
     validates :body
-    validates :genre
   end
 end
