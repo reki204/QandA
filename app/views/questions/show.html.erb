@@ -1,0 +1,90 @@
+<div class="row">
+  <h2 class="my-5  text-center"><%= @question.title %></h2>
+  <div class="d-flex justify-content-around">
+    <%= image_tag @question.image_url, size: "300x300" if @question.image?%>
+    <div>
+      <div class="p-2 bd-highlight w-100">
+        <span>質問文</span> <%= simple_format @question.body %>
+      </div>
+      <div class="p-2 bd-highlight w-100">
+        <span>ジャンル</span><br>
+        <%= @question.genre %>
+      </div>
+      <div class="p-2 bd-highlight w-100">
+        <span>名前</span><br>
+        <%= @question.user.username %>
+        <%= link_to user_path(@question.user) do %>
+          <%= @question.user.username %>さんのページへ
+        <% end %>
+      </div>
+      <div class="p-2 d-inline-flex flex-row ">
+        <% if @question.user_id == current_user.id%>
+          <%= link_to edit_question_path(@question) do %>
+            <div class="d-flex fs-5">
+              <i class="fas fa-edit pt-1"></i><p>編集</p>
+            </div>
+          <% end %>
+          <%= link_to question_path(@question), method: :delete, data: {confirm: "削除しますか？"} do %>
+            <div class="d-flex px-3 fs-5">
+              <i class="fas fa-trash-alt pt-1"></i><p>削除</p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="p-2 text-center">
+    <%= link_to '質問一覧へ', questions_path %>
+  </div>
+  <hr>
+
+  <div class="text-center">
+    <h3>アドバイス一覧  (<%= @question.answers.count %>)</h3>
+    <br>
+    <%= page_entries_info @answers %>
+    <table class="table table-striped">
+      <% if @question.answers.any? %>
+        <thead class="thead-light">
+          <tr>
+            <td>アドバイス</td>
+            <td>ユーザー</td>
+          </tr>
+        </thead>
+        <tbody>
+          <% @answers.each do |answer| %>
+            <tr>
+              <td>
+                <%= simple_format answer.body %>
+              </td>
+              <td>
+                <%= link_to user_path(answer.user) do %>
+                  <%= answer.user.username unless answer.user.blank? %>
+                 <% end %>
+
+                <% if answer.user.id == current_user.id %>
+                  <%= link_to "編集", edit_question_answer_path(@question, answer), class: 'btn' %>
+                  <%= link_to "削除", question_answer_path(@question, answer), method: :delete, data: {confirm: "削除しますか？"}, class: 'btn' %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      <% else %>
+        <p>アドバイスはありません。</p>
+      <% end %>
+    </table>
+    <%= paginate @answers %>
+    <h3>アドバイスをしよう。</h3>
+    <% if user_signed_in? %>
+      <%= form_with(model: [@question, @answer], local: true) do |f| %>
+        <%= f.hidden_field :question_id, { value: @question.id} %>
+        <div class="form-group">
+          <%= f.text_area :body, class: 'form-control' %>   
+        </div>
+        <div class="d-grid gap-2">
+          <%= f.submit "投稿", class: 'btn'%>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
