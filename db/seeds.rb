@@ -5,3 +5,26 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+# 10.times do |n|
+  User.create!(
+    email: "test@example.com",
+    username: "テストユーザー",
+    password: "testpassword"
+  )
+# end
+
+# 10.times do |n|
+  Question.create!(
+    title: "【質問例】これは質問例です",
+    body: "テスト質問",
+    user_id: "1"
+  )
+# end
+
+# 10.times do |n|
+  Answer.create!(
+    body: "テスト回答",
+    user_id: "1",
+    question_id: "1"
+  )
+# end
