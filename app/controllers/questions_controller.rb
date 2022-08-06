@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_question, only: %i[show edit update destroy]
 
   def index
     @questions = Question.all
@@ -14,7 +15,6 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question = Question.find(params[:id])
     @answers = @question.answers.page(params[:page]).per(3)
     @answer = Answer.new
   end
@@ -27,7 +27,7 @@ class QuestionsController < ApplicationController
     @question = Question.new(question_params)
     @question.user_id = current_user.id
     if @question.save
-      redirect_to  question_path(@question), notice: '質問できました。'
+      redirect_to question_path(@question), notice: '質問できました。'
     else
       flash[:alert] = '未入力の項目があります。'
       render :new
@@ -35,14 +35,10 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    @question = Question.find(params[:id])
-    if @question.user != current_user
-      redirect_to questions_path, alert: '不正なアクセスです。'
-    end
+    cannot_edit_current_user
   end
 
   def update
-    @question = Question.find(params[:id])
     if @question.update(question_params)
       redirect_to question_path(@question), notice: '更新できました。'
     else
@@ -51,12 +47,15 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    question = Question.find(params[:id])
-    question.destroy
+    @question.destroy
     redirect_to questions_path
   end
 
   private
+    def set_question
+      @question = Question.find(params[:id])
+    end
+
     def question_params
       params.require(:question).permit(:title, :body, :image)
     end
