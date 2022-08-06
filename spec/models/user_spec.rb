@@ -1,20 +1,20 @@
 require 'rails_helper'
 
-RSpec.describe Answer, type: :model do
-  describe 'question' do
+RSpec.describe User, type: :model do
+  describe 'user' do
     before do
-      @answer = build(:answer)
+      @user = build(:user)
     end
   end
   context 'when valid parameters' do
     it 'all fields are filled in' do
-      expect(@answer).to be_valid
+      expect(@user).to be_valid
     end
   end
   context 'when invalid parameters' do
     it 'not all fields are filled in.' do
-      @answer = answer.new
-      expect(@answer.save).to be_falsey
+      @user = User.new
+      expect(@user.save).to be_falsey
     end
   end
 end

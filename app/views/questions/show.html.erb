@@ -7,10 +7,6 @@
         <span>質問文</span> <%= simple_format @question.body %>
       </div>
       <div class="p-2 bd-highlight w-100">
-        <span>ジャンル</span><br>
-        <%= @question.genre %>
-      </div>
-      <div class="p-2 bd-highlight w-100">
         <span>名前</span><br>
         <%= @question.user.username %>
         <%= link_to user_path(@question.user) do %>
